@@ -355,11 +355,11 @@ Window {
 
         /// Detect if window was snapped
         /// left/right halves
-        if (width === halfScreenWidth && height == currentScreenHeight && dy === maxArea.y) {
-            if (dx === maxArea.x) {
+        if (tiledHalfHorizontal(client)) {
+            if (tiledLeft(client)) {
                 /// show on right half
                 delayedShowAssist(maxArea.x + window.width, window.y, undefined, undefined, window);
-            } else if (dx === maxArea.x + halfScreenWidth) {
+            } else if (tiledRight(client)) {
                 /// show on left half
                 delayedShowAssist(maxArea.x, maxArea.y, undefined, undefined, window);
             }
@@ -367,11 +367,11 @@ Window {
             layoutMode = 0;
 
         /// top/bottom halves
-        } else if (width == currentScreenWidth && height == currentScreenHeight / 2 && dx === maxArea.x) {
-            if(dy === maxArea.y) {
+        } else if (tiledHalVertical(client)) {
+            if(tiledTop(client)) {
                 /// show in bottom half
                 delayedShowAssist(maxArea.x, maxArea.y + halfScreenHeight, halfScreenHeight, currentScreenWidth);
-            } else if (dy === maxArea.y + halfScreenHeight) {
+            } else if (tiledBottom(client)) {
                 /// show in top half
                 delayedShowAssist(maxArea.x, maxArea.y, halfScreenHeight, currentScreenWidth);
             }
@@ -380,7 +380,7 @@ Window {
         }
 
         /// quater tiling
-        else if (width === halfScreenWidth && height == halfScreenHeight) {
+        else if (tiledQuarter(client)) {
             /// define current screen quaters
              screenQuatersToShowNext = {
                 0: { dx: maxArea.x, dy:  maxArea.y, height: halfScreenHeight, width: halfScreenWidth, },
@@ -454,6 +454,50 @@ Window {
             filteredQuaters = [];
             screenQuatersToShowNext = {};
         }
+    }
+
+    /// detect tiling
+    function area(client) {
+        return workspace.clientArea(KWin.MaximizeArea, window);
+    }
+
+    function tiledHalfHorizontal(client, area) {
+        return client.width === area(client).width/2 && client.height == area(client).height && client.y = area(client).y;
+    }
+
+    function tiledHalfVertical(client) {
+        return client.width == area(client.width) && client.height == area.height/2 && client.x == arae(client.x);
+    }
+
+    function tiledQuarter(client) {
+        return client.width === area(client.)width/2 && client.height == area(client).height/2;
+    }
+
+    function tiledLeft(client) {
+        return client.x == area(client).x;
+    }
+
+    function tiledRight(client) {
+        return client.x == area(client).x + area(client).height/2;
+    }
+
+    function tiledTop(client) {
+        return client.y == area(client).y;
+    }
+
+    function tiledBottom(client) {
+        return client.y == area(client).y + area(client).height/2;
+    }
+
+    function tiled(client) {
+        return (tiledHalfHorizontal(client) && (tiledLeft(client) || tiledRight(client))) 
+            || (tiledHalfVertical(client) && (tiledTop(client) || tiledBottom(client)))
+            || (tiledQuarter(client) && (
+                    (tiledLeft(client) && tiledTop(client))
+                 || (tiledRight(client) && tiledTop(client)
+                 || (tiledLeft(client) && tiledBottom(client))
+                 || (tiledRight(client) && tiledBottom(client))
+            )));
     }
 
     /// utility functions
