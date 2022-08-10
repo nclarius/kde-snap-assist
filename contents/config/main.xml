@@ -5,6 +5,14 @@
                           http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
     <kcfgfile name=""/>
     <group name="">
+		<entry name="showFilled" type="bool">
+			<label>Show on tiles that are already filled</label>
+		  <default>true</default>
+		</entry>
+		<entry name="showSnapped" type="bool">
+			<label>Show already snapped windows</label>
+		  <default>true</default>
+		</entry>
 		<entry name="showOtherScreensWindows" type="bool">
 		  <label>Show windows from other screens</label>
 		  <default>false</default>

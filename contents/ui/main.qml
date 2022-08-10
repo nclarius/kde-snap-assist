@@ -56,10 +56,12 @@ Window {
     property color textColor
     property int borderRadius
     property bool sortByLastActive
+    property bool descendingOrder
     property bool showMinimizedWindows
     property bool showOtherScreensWindows
     property bool showOtherDesktopsWindows
-    property bool descendingOrder
+    property bool showSnappedwindows
+    property bool showFilledTiles
 
     Connections {
         target: workspace
